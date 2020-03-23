@@ -159,12 +159,11 @@ const changeToNewName = function (id,newName) {
 };
 
 const getItemNewNameFromElement = function (item) {
-  return $(item)
-    .closest('.js-item-element').find('.js-newName-element').val();
+  return $(item).closest('.js-item-element').find('.js-newName-element').val();
 };
 
 const handleEditClick = function () {
-  $('.js-item-edit').click(() => {
+  $('.js-shopping-list').on('click', '.js-item-edit', event => {
     const id = getItemIdFromElement(event.currentTarget);
     const newName = getItemNewNameFromElement(event.currentTarget);
     changeToNewName(id,newName);
