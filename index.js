@@ -1,3 +1,4 @@
+// eslint-disable-next-line strict
 const store = {
   items: [
     { id: cuid(), name: 'apples', checked: false },
@@ -5,7 +6,7 @@ const store = {
     { id: cuid(), name: 'milk', checked: true },
     { id: cuid(), name: 'bread', checked: false }
   ],
-  hideCheckedItems: false
+  hideCheckedItems: false,
 };
 
 const generateItemElement = function (item) {
@@ -19,6 +20,13 @@ const generateItemElement = function (item) {
   return `
     <li class='js-item-element' data-item-id='${item.id}'>
       ${itemTitle}
+      <form>
+        <label for="newname">New Name:</label>
+        <input class='js-newName-element'type="text" id="newname" name="newname" placeholder="Type new name">
+        <button class='shopping-item-edit js-item-edit'>
+          <span class='button-label'>Enter</span>
+        </button>
+      </form>
       <div class='shopping-item-controls'>
         <button class='shopping-item-toggle js-item-toggle'>
           <span class='button-label'>check</span>
@@ -145,6 +153,25 @@ const handleToggleFilterClick = function () {
   });
 };
 
+const changeToNewName = function (id,newName) {
+  const foundItem = store.items.find(item => item.id === id);
+  foundItem.name = newName;
+};
+
+const getItemNewNameFromElement = function (item) {
+  return $(item)
+    .closest('.js-item-element').find('.js-newName-element').val();
+};
+
+const handleEditClick = function () {
+  $('.js-item-edit').click(() => {
+    const id = getItemIdFromElement(event.currentTarget);
+    const newName = getItemNewNameFromElement(event.currentTarget);
+    changeToNewName(id,newName);
+    render();
+  });
+};
+
 /**
  * This function will be our callback when the
  * page loads. It is responsible for initially 
@@ -160,6 +187,7 @@ const handleShoppingList = function () {
   handleItemCheckClicked();
   handleDeleteItemClicked();
   handleToggleFilterClick();
+  handleEditClick();
 };
 
 // when the page loads, call `handleShoppingList`
